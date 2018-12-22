@@ -30,7 +30,7 @@ class FrameChange {
         return this
     }
     update(frameElapsedTime) {
-        if (this.tickFrame++ == this.framesToChange) {
+        if (this.tick == 0 || (this.tickFrame++ == this.framesToChange)) {
             const frame = this.frames[++this.currentFrameIndex % this.frameTotal]
             const texture = this.target.graphicsComponent.texture
             texture && texture.updateFrame(frame)

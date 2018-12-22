@@ -22,6 +22,13 @@ class GraphicsComponent {
         return this
     }
     setGraphicsInfo(session, camera, matrix, parentAlpha, width, height) {
+        if (this.texture && this.texture.rotated) {
+            matrix.translate(
+                0,
+                height
+            )
+            matrix.rotate(-Math.PI * 0.5)
+        }
         session.setTransformMatrix(matrix)
         session.setAlpha(this.alphaComputed = parentAlpha * this.alpha)
 

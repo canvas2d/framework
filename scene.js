@@ -7,6 +7,10 @@ class Scene extends Node {
     constructor() {
         super()
     }
+    init() {
+        super.init()
+        return this
+    }
     addCameraSupport(camera) {
         this.cameraComponent = camera || CameraComponent.create(this)
     }
@@ -19,7 +23,7 @@ class Scene extends Node {
         this.cameraComponent = this.tileComponent = null
     }
     static create() {
-        return (cache.length ? cache.pop() : new Scene)
+        return (cache.length ? cache.pop() : new Scene).init()
     }
     static collect(item) {
         cache.push(item)

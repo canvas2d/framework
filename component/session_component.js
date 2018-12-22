@@ -7,7 +7,11 @@ class SessionComponent {
     init(dom) {
         this.resolutionComponent = ResolutionComponent.create()
         this.canvasComponent = CanvasComponent.create(dom)
+        this.deltaTime = 16.66
         return this
+    }
+    update() {
+        this.canvasComponent.update()
     }
     setTransformMatrix(matrix) {
         this.setTransform(matrix.a, matrix.b, matrix.c, matrix.d, matrix.e, matrix.f)

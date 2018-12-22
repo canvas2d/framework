@@ -14,6 +14,7 @@ class App {
         return this
     }
     update() {
+        this.sessionComponent.update()
         this.currentScene && this.currentScene.update(this.sessionComponent)
     }
     render() {

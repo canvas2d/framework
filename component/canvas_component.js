@@ -15,6 +15,10 @@ class CanvasComponent {
         this.domEventComponent = DomEventComponent.create(dom, this)
         return this
     }
+    update() {
+        this.ctx.setTransform(1, 0, 0, 1, 0, 0)
+        this.ctx.clearRect(0, 0, this.host.width, this.host.height)
+    }
     setTransform(a, b, c, d, e, f) {
         this.ctx.setTransform(a, b, c, d, e, f)
     }

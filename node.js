@@ -19,10 +19,10 @@ class Node {
         this.animationComponent = AnimationComponent.create(this)
     }
     update(session, camera, parentMatrix) {
-        this.stateComponent && this.stateComponent.update()
-        this.animationComponent && this.animationComponent.update()
+        this.stateComponent && this.stateComponent.update(session)
+        this.animationComponent && this.animationComponent.update(session)
         this.spaceComponent.update(session, camera, parentMatrix)
-        this.graphicsComponent.update()
+        this.graphicsComponent.update(session)
         this.nodeTreeComponent.update(session, camera, this.spaceComponent.getMatrix())
     }
     render(session, camera) {

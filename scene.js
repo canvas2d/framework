@@ -17,6 +17,19 @@ class Scene extends Node {
     addTileSupport(tile) {
         this.tileComponent = tile || TileComponent.create(this)
     }
+    update(session) {
+        const camera = this.cameraComponent
+
+        super.update(session, camera, this.spaceComponent.getMatrix())
+
+        this.tileComponent && this.tileComponent.update(session, camera)
+
+        camera && camera.update(session)
+        return this
+    }
+    render(session) {
+        this.nodeTreeComponent.render(session, this.cameraComponent, this.graphicsComponent.getAlpha())
+    }
     remove() {
         this.cameraComponent && this.cameraComponent.remove()
         this.tileComponent && this.tileComponent.remove()

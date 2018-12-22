@@ -14,10 +14,10 @@ class App {
         return this
     }
     update() {
-        this.currentScene && this.currentScene.update()
+        this.currentScene && this.currentScene.update(this.sessionComponent)
     }
     render() {
-        this.currentScene && this.currentScene.render()
+        this.currentScene && this.currentScene.render(this.sessionComponent)
     }
     runLoop() {
         this.update()

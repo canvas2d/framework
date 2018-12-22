@@ -12,16 +12,16 @@ class NodeTreeComponent {
         this.zIndex = 0
         return this
     }
-    update(session, camera, parentMatrix) {
+    update(...args) {
         // console.log('NodeTreeComponent update')
-        this.children.forEach(function(child) {
-            child && child.update(session, camera, parentMatrix)
+        this.children.forEach((child) => {
+            child && child.update(...args)
         })
     }
-    render(session, camera) {
+    render(...args) {
         // console.log('NodeTreeComponent render')
-        this.children.forEach(function(child) {
-            child && child.render(session, camera)
+        this.children.forEach((child) => {
+            child && child.render(...args)
         })
     }
     setParent(parent) {
@@ -37,7 +37,7 @@ class NodeTreeComponent {
             }
             children[at] = child
         }
-        child.setParent(this)
+        child.nodeTreeComponent.setParent(this)
         return this
     }
     sortChildren() {

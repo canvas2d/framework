@@ -18,16 +18,17 @@ class Node {
     addAnimationSupport() {
         this.animationComponent = AnimationComponent.create(this)
     }
-    update() {
+    update(session, camera, parentMatrix) {
         this.stateComponent && this.stateComponent.update()
         this.animationComponent && this.animationComponent.update()
-        this.spaceComponent.update()
+        this.spaceComponent.update(session, camera, parentMatrix)
         this.graphicsComponent.update()
-        this.nodeTreeComponent.update()
+        this.nodeTreeComponent.update(session, camera, this.spaceComponent.getMatrix())
     }
     render(session, camera) {
-        this.graphicsComponent.render(session, camera)
-        this.nodeTreeComponent.render(session, camera)
+        const alpha = this.graphicsComponent.getAlpha()
+        this.graphicsComponent.render(session, camera, alpha)
+        this.nodeTreeComponent.render(session, camera, alpha)
     }
     remove() {
         this.nodeTreeComponent.remove()

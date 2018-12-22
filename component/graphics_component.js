@@ -12,25 +12,33 @@ class GraphicsComponent {
         this.notUseCamera = false
         return this
     }
-    update(session, camera, matrix) {
+    getAlpha() {
+        return this.alphaComputed
+    }
+    update(session, camera) {
         if (this.texture) {
             this.texture.update(session, camera)
         }
         return this
     }
     setGraphicsInfo(session, camera, matrix, parentAlpha, width, height) {
-        if (camera && !this.notUseCamera) {
-            camera.transform(matrix)
-        } else {
-            session.transform(matrix)
-        }
         session.setTransformMatrix(matrix)
         session.setAlpha(this.alphaComputed = parentAlpha * this.alpha)
 
         this.width = width
         this.height = height
     }
-    render(session, camera) {
+    render(session, camera, parentAlpha) {
+        const node = this.host
+        this.setGraphicsInfo(
+            session,
+            camera,
+            node.spaceComponent.getMatrix(),
+            parentAlpha,
+            node.spaceComponent.getWidth(),
+            node.spaceComponent.getHeight()
+        )
+
         if (this.texture) {
             this.renderTexture(session, this.texture)
         } else if (this.color) {

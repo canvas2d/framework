@@ -29,7 +29,14 @@ class GraphicsComponent {
             )
             matrix.rotate(-Math.PI * 0.5)
         }
-        session.transform(matrix)
+
+        if (camera && !this.notUseCamera) {
+            camera.transform(matrix)
+        } else {
+            session.transform(matrix)
+        }
+        session.setTransformMatrix(matrix)
+
         session.setAlpha(this.alphaComputed = parentAlpha * this.alpha)
 
         this.width = width

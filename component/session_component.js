@@ -29,7 +29,6 @@ class SessionComponent {
     transform(matrix) {
         const display = this.getDisplayInfo()
         display._baseTransformI.transformMatrixTo(matrix, matrix)
-        this.setTransformMatrix(matrix)
     }
     setTransformMatrix(matrix) {
         this.setTransform(matrix.a, matrix.b, matrix.c, matrix.d, matrix.e, matrix.f)

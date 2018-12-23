@@ -3,40 +3,26 @@ import Scene from './scene.js'
 import Node from './node.js'
 import Texture from './common/texture.js'
 import ImageLoader from './util/image_loader.js'
-import Ajax from './util/ajax.js'
-import PlistParser from './util/plist_parser.js'
-import FrameChange from './action/frame_change.js'
 
 const app = App.create()
 const scene = Scene.create()
 
 const node = Node.create()
 
-node.spaceComponent.position.update(300, 300)
-node.spaceComponent.width = node.spaceComponent.height = 50
+node.addHookSupport()
+ImageLoader.load('./resource/1136_768.jpg').then(function(img) {
+    node.graphicsComponent.texture = Texture.create(img)
+    node.spaceComponent.anchor.update(0, 0)
+    node.hookComponent.onUpdate.push(function(session, camera) {
+        const design = session.getDesignInfo()
 
-Promise.all([
-    Ajax.get('./resource/PlayerSkeleton.plist'),
-    ImageLoader.load('./resource/PlayerSkeleton.png')
-]).then(function(items) {
-    const plistText = items[0]
-    const img = items[1]
-    const runFrame = /^Player_Skeleton_run_\d+.png$/
-
-    const frames = PlistParser.parse(items[0]).frames
-
-    const runFrames = Object.keys(frames).filter(function(key) {
-        return key.match(runFrame)
-    }).map(function(key) {
-        return frames[key].frame
+        this.spaceComponent.width = design.width
+        this.spaceComponent.height = design.height
     })
 
-    node.graphicsComponent.texture = Texture.create(img)
-    node.addAnimationSupport()
-    node.animationComponent.runAction(FrameChange.create(runFrames, 5))
+    scene.nodeTreeComponent.addChild(node)
 })
-
-scene.nodeTreeComponent.addChild(node)
+app.sessionComponent.setDesignSize(1136, 768, 1136, 768)
 
 app.presentScene(scene)
 app.run()

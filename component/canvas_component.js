@@ -1,4 +1,6 @@
 import DomEventComponent from './dom_event_component.js'
+import ResolutionComponent from './resolution_component.js'
+import debounce from '../common/debounce.js'
 
 const cache = []
 class CanvasComponent {
@@ -12,8 +14,35 @@ class CanvasComponent {
         }
         this.host = dom
         this.ctx = dom.getContext('2d')
+
+        this.resolutionComponent = ResolutionComponent.create()
         this.domEventComponent = DomEventComponent.create(dom, this)
+        this.resizeHandler = debounce(this.onResize.bind(this), 100)
+        this.resizeListen()
+        // this.onResize()
         return this
+    }
+    onResize() {
+        const scaleRatio = window.devicePixelRatio
+        console.log('resize', scaleRatio)
+
+        let fullWidth = window.innerWidth//document.documentElement.scrollWidth
+        let fullHeight = window.innerHeight//document.documentElement.scrollHeight
+
+        // console.log(fullWidth, fullHeight)
+        this.host.style.width = fullWidth + 'px'
+        this.host.style.height = fullHeight + 'px'
+        fullWidth *= scaleRatio
+        fullHeight *= scaleRatio
+        fullWidth |= 0
+        fullHeight |= 0
+        this.host.width = fullWidth
+        this.host.height = fullHeight
+
+        this.resolutionComponent.resize(fullWidth, fullHeight, scaleRatio)
+    }
+    resizeListen() {
+        window.addEventListener('resize', this.resizeHandler)
     }
     update() {
         this.ctx.setTransform(1, 0, 0, 1, 0, 0)
@@ -34,10 +63,13 @@ class CanvasComponent {
     }
     remove() {
         this.domEventComponent.remove()
+        window.removeEventListener('resize', this.resizeHandler)
+
         this.host =
             this.dom =
             this.ctx =
-            this.domEventComponent = null
+            this.domEventComponent =
+            this.resizeHandler = null
         this._collect()
     }
     _collect() {

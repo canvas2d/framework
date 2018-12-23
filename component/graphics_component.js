@@ -29,7 +29,7 @@ class GraphicsComponent {
             )
             matrix.rotate(-Math.PI * 0.5)
         }
-        session.setTransformMatrix(matrix)
+        session.transform(matrix)
         session.setAlpha(this.alphaComputed = parentAlpha * this.alpha)
 
         this.width = width

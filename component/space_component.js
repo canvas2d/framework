@@ -15,16 +15,18 @@ class SpaceComponent {
         this.rotation = Rotation.create(0)
         this.scale = Vector.create(1.0, 1.0)
         this.position = Vector.create(0, 0)
+        this.relative = Vector.create(0, 0)
         this._matrix = Matrix.create(1.0, 0.0, 0.0, 1.0, 0.0, 0.0)
         return this
     }
     update(session, camera, parentMatrix) {
         // console.log('SpaceComponent update')
 
+        const design = session.getDesignInfo()
         const ax = this.width * this.anchor.x
         const ay = this.height * this.anchor.y
-        const tx = this.position.x
-        const ty = this.position.y
+        const tx = this.position.x + this.relative.x * design.resolution.x
+        const ty = this.position.y + this.relative.y * design.resolution.y
         const sin = this.rotation.sin
         const cos = this.rotation.cos
         const sx = this.scale.x

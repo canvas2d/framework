@@ -16,13 +16,13 @@ ImageLoader.load('./resource/1136_768.jpg').then(function(img) {
     node.hookComponent.onUpdate.push(function(session, camera) {
         const design = session.getDesignInfo()
 
-        this.spaceComponent.width = design.width
-        this.spaceComponent.height = design.height
+        this.spaceComponent.width = design.resolution.x
+        this.spaceComponent.height = design.resolution.y
     })
 
     scene.nodeTreeComponent.addChild(node)
 })
-app.sessionComponent.setDesignSize(1136, 768, 1136, 768)
+app.sessionComponent.setDesignSize(1136, 768, 1600, 900)
 
 app.presentScene(scene)
 app.run()

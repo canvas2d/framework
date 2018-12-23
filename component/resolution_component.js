@@ -1,4 +1,5 @@
 import Matrix from '../common/matrix.js'
+import Vector from '../common/vector.js'
 
 const cache = []
 class ResolutionComponent {
@@ -8,7 +9,8 @@ class ResolutionComponent {
             width: 0,
             height: 0,
             maxWidth: 0,
-            maxHeight: 0
+            maxHeight: 0,
+            resolution: Vector.create(0,0)
         }
         this.display = {
             width: 0,
@@ -66,6 +68,7 @@ class ResolutionComponent {
             paddingX * -0.5,
             paddingY * -0.5
         )
+        this.design.resolution.update(width, height)
 
         // this.pubsubComponent.pub('resolution-change', this.design)
     }

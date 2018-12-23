@@ -1,10 +1,12 @@
 import CanvasComponent from './canvas_component.js'
+import DomEventComponent from './dom_event_component.js'
 
 const cache = []
 class SessionComponent {
     constructor() {}
     init(dom) {
         this.canvasComponent = CanvasComponent.create(dom)
+        this.domEventComponent = DomEventComponent.create(this.canvasComponent.host, this)
         this.deltaTime = 16.66
         return this
     }
@@ -13,6 +15,12 @@ class SessionComponent {
     }
     getDesignInfo() {
         return this.canvasComponent.resolutionComponent.design
+    }
+    getScaleRatio() {
+        return this.getDisplayInfo().scaleRatio
+    }
+    getTransform() {
+        return this.getDisplayInfo().baseTransform
     }
     setDesignSize(width, height, maxWidth, maxHeight) {
         const resolution = this.canvasComponent.resolutionComponent
@@ -51,6 +59,7 @@ class SessionComponent {
     }
     remove() {
         this.canvasComponent.remove()
+        this.domEventComponent.remove()
         this.canvasComponent =
             this.host = null
         this._collect()

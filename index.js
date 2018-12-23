@@ -30,6 +30,7 @@ ImageLoader.load('./resource/1136_768.jpg').then(function(img) {
     })
 })
 
+app.sessionComponent.domEventComponent.addTouchInputSupport()
 app.sessionComponent.setDesignSize(1136, 768, 1600, 900)
 
 app.presentScene(scene)

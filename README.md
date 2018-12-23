@@ -1,5 +1,14 @@
 # framework
-A canvas 2d game engine
+
+这是一个正在完善中的canvas 2d 游戏引擎
+
+目标是为了用简单的代码，实现一个游戏引擎核心，在此基础上，用组件的方式构造一切
+
+完美支持微信小游戏、Facebook Instant游戏、Ejecta
+
+我们将从0开始，首先构建一个空的游戏循环，然后向其中添加必不可少的组件
+
+伴随着每一章节的代码提交，可以直观的看到这个系统是如何生长和变化的
 
 1. [游戏循环 - App](https://github.com/canvas2d/framework/blob/master/1.app.md)
 

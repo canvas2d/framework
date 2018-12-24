@@ -23,9 +23,9 @@ btnLeft.hookComponent.onUpdate.push(function(session) {
     this.graphicsComponent.color = inputId ? 'red' : 'blue'
 })
 
-btnLeft.setInteractive(true)
-btnLeft.inputId = 1
-btnLeft.keyCode = 'A'.charCodeAt(0)
+btnLeft.addInteractSupport()
+btnLeft.interactComonent.inputId = 1
+btnLeft.interactComonent.keyCode = 'A'.charCodeAt(0)
 
 scene.nodeTreeComponent.addChild(btnLeft)
 
@@ -45,9 +45,9 @@ btnRight.hookComponent.onUpdate.push(function(session) {
     this.graphicsComponent.color = inputId ? 'red' : 'blue'
 })
 
-btnRight.setInteractive(true)
-btnRight.inputId = 2
-btnRight.keyCode = 'D'.charCodeAt(0)
+btnRight.addInteractSupport()
+btnRight.interactComonent.inputId = 2
+btnRight.interactComonent.keyCode = 'D'.charCodeAt(0)
 
 scene.nodeTreeComponent.addChild(btnRight)
 
@@ -72,7 +72,11 @@ scene.cameraComponent.hookComponent.onUpdate.push(function(session) {
 
 app.sessionComponent.domEventComponent.addTouchInputSupport()
 app.sessionComponent.domEventComponent.addKeyboardInputSupport()
-app.sessionComponent.domEventComponent.listenToKeyCodes([btnLeft.keyCode, btnRight.keyCode])
+app.sessionComponent.domEventComponent.addMouseInputSupport()
+app.sessionComponent.domEventComponent.listenToKeyCodes([
+    btnLeft.interactComonent.keyCode,
+    btnRight.interactComonent.keyCode
+])
 
 app.sessionComponent.setDesignSize(1136, 768, 1600, 900)
 

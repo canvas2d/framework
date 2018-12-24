@@ -19,13 +19,13 @@ btnLeft.spaceComponent.anchor.update(0, 1)
 btnLeft.addHookSupport()
 
 btnLeft.hookComponent.onUpdate.push(function(session) {
-    const inputId = session.getCommandInput(this.interactComonent.inputId)
+    const inputId = session.getCommandInput(this.interactComponent.inputId)
     this.graphicsComponent.color = inputId ? 'red' : 'blue'
 })
 
 btnLeft.addInteractSupport()
-btnLeft.interactComonent.inputId = 1
-btnLeft.interactComonent.keyCode = 'A'.charCodeAt(0)
+btnLeft.interactComponent.inputId = 1
+btnLeft.interactComponent.keyCode = 'A'.charCodeAt(0)
 
 scene.nodeTreeComponent.addChild(btnLeft)
 
@@ -41,13 +41,13 @@ btnRight.spaceComponent.anchor.update(1, 1)
 btnRight.addHookSupport()
 
 btnRight.hookComponent.onUpdate.push(function(session) {
-    const inputId = session.getCommandInput(this.interactComonent.inputId)
+    const inputId = session.getCommandInput(this.interactComponent.inputId)
     this.graphicsComponent.color = inputId ? 'red' : 'blue'
 })
 
 btnRight.addInteractSupport()
-btnRight.interactComonent.inputId = 2
-btnRight.interactComonent.keyCode = 'D'.charCodeAt(0)
+btnRight.interactComponent.inputId = 2
+btnRight.interactComponent.keyCode = 'D'.charCodeAt(0)
 
 scene.nodeTreeComponent.addChild(btnRight)
 
@@ -61,10 +61,10 @@ scene.addCameraSupport()
 scene.cameraComponent.position.update(100, 1500)
 scene.cameraComponent.addHookSupport()
 scene.cameraComponent.hookComponent.onUpdate.push(function(session) {
-    if (session.getCommandInput(btnLeft.interactComonent.inputId)) {
+    if (session.getCommandInput(btnLeft.interactComponent.inputId)) {
         this.position.x -= 5
     }
-    if (session.getCommandInput(btnRight.interactComonent.inputId)) {
+    if (session.getCommandInput(btnRight.interactComponent.inputId)) {
         this.position.x += 5
     }
     this.position.x = Math.max(session.getDesignInfo().resolution.x >> 1, this.position.x)
@@ -74,8 +74,8 @@ app.sessionComponent.domEventComponent.addTouchInputSupport()
 app.sessionComponent.domEventComponent.addKeyboardInputSupport()
 app.sessionComponent.domEventComponent.addMouseInputSupport()
 app.sessionComponent.domEventComponent.listenToKeyCodes([
-    btnLeft.interactComonent.keyCode,
-    btnRight.interactComonent.keyCode
+    btnLeft.interactComponent.keyCode,
+    btnRight.interactComponent.keyCode
 ])
 
 app.sessionComponent.setDesignSize(1136, 768, 1600, 900)

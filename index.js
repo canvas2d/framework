@@ -19,7 +19,7 @@ btnLeft.spaceComponent.anchor.update(0, 1)
 btnLeft.addHookSupport()
 
 btnLeft.hookComponent.onUpdate.push(function(session) {
-    const inputId = session.getCommandInput(this.inputId)
+    const inputId = session.getCommandInput(this.interactComonent.inputId)
     this.graphicsComponent.color = inputId ? 'red' : 'blue'
 })
 
@@ -41,7 +41,7 @@ btnRight.spaceComponent.anchor.update(1, 1)
 btnRight.addHookSupport()
 
 btnRight.hookComponent.onUpdate.push(function(session) {
-    const inputId = session.getCommandInput(this.inputId)
+    const inputId = session.getCommandInput(this.interactComonent.inputId)
     this.graphicsComponent.color = inputId ? 'red' : 'blue'
 })
 
@@ -61,10 +61,10 @@ scene.addCameraSupport()
 scene.cameraComponent.position.update(100, 1500)
 scene.cameraComponent.addHookSupport()
 scene.cameraComponent.hookComponent.onUpdate.push(function(session) {
-    if (session.getCommandInput(btnLeft.inputId)) {
+    if (session.getCommandInput(btnLeft.interactComonent.inputId)) {
         this.position.x -= 5
     }
-    if (session.getCommandInput(btnRight.inputId)) {
+    if (session.getCommandInput(btnRight.interactComonent.inputId)) {
         this.position.x += 5
     }
     this.position.x = Math.max(session.getDesignInfo().resolution.x >> 1, this.position.x)

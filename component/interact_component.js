@@ -1,5 +1,5 @@
 const cache = []
-class InteractComonent {
+class InteractComponent {
     constructor() {}
     init(host) {
         this.host = host
@@ -58,13 +58,13 @@ class InteractComonent {
         this._collect()
     }
     _collect() {
-        InteractComonent.collect(this)
+        InteractComponent.collect(this)
     }
     static create(host, session) {
-        return (cache.length ? cache.pop() : new InteractComonent).init(host, session)
+        return (cache.length ? cache.pop() : new InteractComponent).init(host, session)
     }
     static collect(item) {
         cache.push(item)
     }
 }
-export default InteractComonent
+export default InteractComponent

@@ -45,7 +45,6 @@ class KeyBoardInputComponent {
         if (keyEvents[code] === undefined) {
             return
         }
-        console.log(e)
         const type = e.type
         switch (type) {
             case 'keydown':

@@ -28,5 +28,8 @@
 13. [UI元素相对定位](https://github.com/canvas2d/framework/blob/master/13.ui_position_relative.md)
 14. [二维摄像机 camera_component](https://github.com/canvas2d/framework/blob/master/14.camera_component.md)
 15. [事件处理](https://github.com/canvas2d/framework/blob/master/15.dom_event_component.md)
-16. [砖块地图](https://github.com/canvas2d/framework/blob/master/16.tiled_component.md)
-17. 待补充
+16. [砖块地图](https://github.com/canvas2d/framework/blob/master/16.tile_component.md)
+17. 碰撞处理
+18. 状态过滤器StateComponent
+19. 小游戏适配、Ejecta适配
+20. 游戏配置文件

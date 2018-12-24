@@ -32,7 +32,7 @@ class Scene extends Node {
     handleInput(session) {
         session.commandInputComponent.reset()
         this.nodeTreeComponent.children.forEach(function(child) {
-            child.handleInteractive(session)
+            child.handleInteract(session)
         })
     }
     render(session) {

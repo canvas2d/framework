@@ -30,7 +30,7 @@ class Node {
     addHookSupport() {
         this.hookComponent = this.hookComponent || HookComponent.create(this)
     }
-    handleInteractive(session) {
+    handleInteract(session) {
         this.interactComonent && this.interactComonent.handle(session)
     }
     update(session, camera, parentMatrix) {

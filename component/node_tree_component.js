@@ -1,5 +1,5 @@
 function sort(a, b) {
-    return a.zIndex - b.zIndex
+    return a.nodeTreeComponent.zIndex - b.nodeTreeComponent.zIndex
 }
 
 const cache = []

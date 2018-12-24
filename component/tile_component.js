@@ -106,7 +106,7 @@ class TileComponent {
     update() {
         // console.log('TileComponent update')
     }
-    handleInteractive() {}
+    handleInteract() {}
     render(session, camera, alpha) {
         if (!this.imageUrl) {
             return

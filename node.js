@@ -3,7 +3,7 @@ import GraphicsComponent from './component/graphics_component.js'
 import SpaceComponent from './component/space_component.js'
 import AnimationComponent from './component/animation_component.js'
 import HookComponent from './component/hook_component.js'
-import InteractComonent from './component/interact_component.js'
+import InteractComponent from './component/interact_component.js'
 
 const cache = []
 class Node {
@@ -15,11 +15,11 @@ class Node {
         this.hookComponent = null
         this.stateComponent = null
         this.animationComponent = null
-        this.interactComonent = null
+        this.interactComponent = null
         return this
     }
     addInteractSupport() {
-        this.interactComonent = this.interactComonent || InteractComonent.create(this)
+        this.interactComponent = this.interactComponent || InteractComponent.create(this)
     }
     addStateSupport(state) {
         this.stateComponent = state
@@ -31,7 +31,7 @@ class Node {
         this.hookComponent = this.hookComponent || HookComponent.create(this)
     }
     handleInteract(session) {
-        this.interactComonent && this.interactComonent.handle(session)
+        this.interactComponent && this.interactComponent.handle(session)
     }
     update(session, camera, parentMatrix) {
         this.hookComponent && this.hookComponent.handleOnUpdate(session, camera)

@@ -17,19 +17,19 @@ btn.graphicsComponent.color = 'blue'
 
 btn.addHookSupport()
 btn.hookComponent.onUpdate.push(function(session) {
-    const inputId = session.getCommandInput(this.inputId)
+    const inputId = session.getCommandInput(this.interactComonent.inputId)
     this.graphicsComponent.color = inputId ? 'red' : 'blue'
 })
-
-btn.setInteractive(true)
-btn.inputId = 1
-btn.keyCode = 'D'.charCodeAt(0)
+btn.addInteractSupport()
+btn.interactComonent.inputId = 1
+btn.interactComonent.keyCode = 'D'.charCodeAt(0)
 
 scene.nodeTreeComponent.addChild(btn)
 
 app.sessionComponent.domEventComponent.addTouchInputSupport()
 app.sessionComponent.domEventComponent.addKeyboardInputSupport()
-app.sessionComponent.domEventComponent.listenToKeyCodes([btn.keyCode])
+app.sessionComponent.domEventComponent.addMouseInputSupport()
+app.sessionComponent.domEventComponent.listenToKeyCodes([btn.interactComonent.keyCode])
 
 app.sessionComponent.setDesignSize(1136, 768, 1600, 900)
 

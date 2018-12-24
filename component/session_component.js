@@ -12,7 +12,7 @@ class SessionComponent {
         this.deltaTime = 16.66
         return this
     }
-    getCommandInput(inputId){
+    getCommandInput(inputId) {
         return this.commandInputComponent.getInput(inputId)
     }
     getDisplayInfo() {
@@ -28,10 +28,13 @@ class SessionComponent {
         return this.getDisplayInfo().baseTransform
     }
     getTouchEvents() {
-        return this.domEventComponent.touchComponent.touchEvents
+        return this.domEventComponent.touchComponent && this.domEventComponent.touchComponent.touchEvents
     }
     getKeyboardEvents() {
-        return this.domEventComponent.keyboardComponent.keyEvents
+        return this.domEventComponent.keyboardComponent && this.domEventComponent.keyboardComponent.keyEvents
+    }
+    getMouseEvent() {
+        return this.domEventComponent.mouseComponent && this.domEventComponent.mouseComponent.mouseEvent
     }
     setDesignSize(width, height, maxWidth, maxHeight) {
         const resolution = this.canvasComponent.resolutionComponent

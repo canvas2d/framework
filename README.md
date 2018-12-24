@@ -30,6 +30,6 @@
 15. [事件处理](https://github.com/canvas2d/framework/blob/master/15.dom_event_component.md)
 16. [砖块地图](https://github.com/canvas2d/framework/blob/master/16.tile_component.md)
 17. 碰撞处理
-18. 状态过滤器StateComponent
+18. 状态管理器StateComponent
 19. 小游戏适配、Ejecta适配
 20. 游戏配置文件

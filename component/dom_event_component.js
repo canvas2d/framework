@@ -17,12 +17,10 @@ class DomEventComponent {
     }
     addKeyboardInputSupport() {
         this.keyboardComponent = KeyBoardInputComponent.create(this.host, this.session)
+        this.keyboardComponent.listen()
     }
-    listenTouchEvents() {
-        this.touchComponent.listen()
-    }
-    listenKeyboardEvents(keys) {
-        this.keyboardComponent.listen(keys)
+    listenToKeyCodes(keys) {
+        this.keyboardComponent.addKeys(keys)
     }
     stopListenTouchEvents() {
         this.touchComponent.stopListen()

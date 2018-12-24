@@ -10,7 +10,9 @@ class CanvasComponent {
             dom = document.createElement('canvas')
             dom.width = document.documentElement.scrollWidth
             dom.height = document.documentElement.scrollHeight
+            dom.setAttribute('tabindex', '1')
             document.body.appendChild(dom)
+            dom.focus()
         }
         this.host = dom
         this.ctx = dom.getContext('2d')
@@ -19,15 +21,14 @@ class CanvasComponent {
         this.domEventComponent = DomEventComponent.create(dom, this)
         this.resizeHandler = debounce(this.onResize.bind(this), 100)
         this.resizeListen()
-        // this.onResize()
         return this
     }
     onResize() {
         const scaleRatio = window.devicePixelRatio
         console.log('resize', scaleRatio)
 
-        let fullWidth = window.innerWidth//document.documentElement.scrollWidth
-        let fullHeight = window.innerHeight//document.documentElement.scrollHeight
+        let fullWidth = window.innerWidth //document.documentElement.scrollWidth
+        let fullHeight = window.innerHeight //document.documentElement.scrollHeight
 
         // console.log(fullWidth, fullHeight)
         this.host.style.width = fullWidth + 'px'

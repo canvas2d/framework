@@ -36,6 +36,26 @@ class Frame {
         }
         return true
     }
+    computeWithMatrix(width, height, matrix) {
+        const x1 = matrix.e
+        const y1 = matrix.f
+
+        const x2 = matrix.a * width + x1
+        const y2 = matrix.b * width + y1
+
+        const x3 = matrix.a * width + matrix.c * height + x1
+        const y3 = matrix.b * width + matrix.d * height + y1
+
+        const x4 = matrix.c * height + x1
+        const y4 = matrix.d * height + y1
+
+        const xMin = Math.min(x1, x2, x3, x4)
+        const xMax = Math.max(x1, x2, x3, x4)
+        const yMin = Math.min(y1, y2, y3, y4)
+        const yMax = Math.max(y1, y2, y3, y4)
+
+        this.update(xMin, yMin, xMax - xMin, yMax - yMin)
+    }
     contains(x, y) {
         return this.x1 <= x && x <= this.x2 && this.y1 <= y && y <= this.y2
     }

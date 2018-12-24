@@ -1,5 +1,6 @@
 import CanvasComponent from './canvas_component.js'
 import DomEventComponent from './dom_event_component.js'
+import CommandInputComponent from './command_input_component.js'
 
 const cache = []
 class SessionComponent {
@@ -7,8 +8,12 @@ class SessionComponent {
     init(dom) {
         this.canvasComponent = CanvasComponent.create(dom)
         this.domEventComponent = DomEventComponent.create(this.canvasComponent.host, this)
+        this.commandInputComponent = CommandInputComponent.create(this)
         this.deltaTime = 16.66
         return this
+    }
+    getCommandInput(inputId){
+        return this.commandInputComponent.getInput(inputId)
     }
     getDisplayInfo() {
         return this.canvasComponent.resolutionComponent.display
@@ -21,6 +26,12 @@ class SessionComponent {
     }
     getTransform() {
         return this.getDisplayInfo().baseTransform
+    }
+    getTouchEvents() {
+        return this.domEventComponent.touchComponent.touchEvents
+    }
+    getKeyboardEvents() {
+        return this.domEventComponent.keyboardComponent.keyEvents
     }
     setDesignSize(width, height, maxWidth, maxHeight) {
         const resolution = this.canvasComponent.resolutionComponent
@@ -60,7 +71,9 @@ class SessionComponent {
     remove() {
         this.canvasComponent.remove()
         this.domEventComponent.remove()
-        this.canvasComponent =
+        this.commandInputComponent.remove()
+        this.commandInputComponent =
+            this.canvasComponent =
             this.host = null
         this._collect()
     }

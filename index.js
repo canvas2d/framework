@@ -6,31 +6,31 @@ import ImageLoader from './util/image_loader.js'
 
 const app = App.create()
 const scene = Scene.create()
-scene.addCameraSupport()
-const position = scene.cameraComponent.position
 
-scene.addHookSupport()
-scene.hookComponent.onUpdate.push(function(session) {
-    position.y = session.getDesignInfo().resolution.y >> 1
-}, function(session) {
-    position.x++
+const btn = Node.create()
+btn.spaceComponent.relative.update(0.5, 0.5)
+btn.spaceComponent.width =
+    btn.graphicsComponent.width =
+    btn.spaceComponent.height =
+    btn.graphicsComponent.spaceComponent = 100
+btn.graphicsComponent.color = 'blue'
+
+btn.addHookSupport()
+btn.hookComponent.onUpdate.push(function(session) {
+    const inputId = session.getCommandInput(this.inputId)
+    this.graphicsComponent.color = inputId ? 'red' : 'blue'
 })
 
-const node = Node.create()
+btn.setInteractive(true)
+btn.inputId = 1
+btn.keyCode = 'D'.charCodeAt(0)
 
-node.addHookSupport()
-scene.nodeTreeComponent.addChild(node)
-ImageLoader.load('./resource/1136_768.jpg').then(function(img) {
-    node.graphicsComponent.texture = Texture.create(img)
-    node.spaceComponent.anchor.update(0, 0)
-    node.hookComponent.onUpdate.push(function(session, camera) {
-        const design = session.getDesignInfo()
-        this.spaceComponent.width = design.resolution.x
-        this.spaceComponent.height = design.resolution.y
-    })
-})
+scene.nodeTreeComponent.addChild(btn)
 
 app.sessionComponent.domEventComponent.addTouchInputSupport()
+app.sessionComponent.domEventComponent.addKeyboardInputSupport()
+app.sessionComponent.domEventComponent.listenToKeyCodes([btn.keyCode])
+
 app.sessionComponent.setDesignSize(1136, 768, 1600, 900)
 
 app.presentScene(scene)

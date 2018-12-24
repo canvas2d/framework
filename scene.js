@@ -16,16 +16,24 @@ class Scene extends Node {
     }
     addTileSupport(tile) {
         this.tileComponent = tile || TileComponent.create(this)
+        this.nodeTreeComponent.addChild(this.tileComponent)
     }
     update(session) {
         const camera = this.cameraComponent
 
+        this.handleInput(session, camera)
         super.update(session, camera, this.spaceComponent.getMatrix())
 
         this.tileComponent && this.tileComponent.update(session, camera)
 
         camera && camera.update(session)
         return this
+    }
+    handleInput(session) {
+        session.commandInputComponent.reset()
+        this.nodeTreeComponent.children.forEach(function(child) {
+            child.handleInteractive(session)
+        })
     }
     render(session) {
         this.nodeTreeComponent.render(session, this.cameraComponent, this.graphicsComponent.getAlpha())

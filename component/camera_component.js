@@ -1,3 +1,4 @@
+import HookComponent from './hook_component.js'
 import Matrix from '../common/matrix.js'
 import Vector from '../common/vector.js'
 import Frame from '../common/frame.js'
@@ -16,15 +17,21 @@ class CameraComponent {
         this._matrixI = Matrix.create(1, 0, 0, 1, 0, 0)
         this.frame = Frame.create(0, 0, 0, 0)
         this.onlyUseTranslate = true
+        this.hookComponent = null
         return this
     }
+    addHookSupport() {
+        this.hookComponent = this.hookComponent || HookComponent.create(this)
+    }
     update(session) {
+        this.hookComponent && this.hookComponent.handleOnUpdate(session)
         const resolution = session.getDesignInfo().resolution
         this.width = resolution.x
         this.height = resolution.y
         this.halfWidth = resolution.x >> 1
         this.halfHeight = resolution.y >> 1
         this.updateMatrix(session)
+        this.hookComponent && this.hookComponent.handleAfterUpdate(session)
     }
     transform(matrix) {
         this._matrixI.transformMatrixTo(matrix, matrix)
@@ -52,10 +59,12 @@ class CameraComponent {
         this.position.remove()
         this._matrix.remove()
         this._matrixI.remove()
+        this.hookComponent && this.hookComponent.remove()
         this.host =
             this.position =
             this._matrix =
-            this._matrixI = null
+            this._matrixI =
+            this.hookComponent = null
         this._collect()
     }
     _collect() {

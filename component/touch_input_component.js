@@ -50,10 +50,10 @@ class TouchInputComponent {
                 e.type,
                 identifier
             )
-            console.log(e.type, touchEvent.x, touchEvent.y)
+            // console.log(e.type, touchEvent.x, touchEvent.y)
             switch (e.type) {
                 case 'touchstart':
-                    console.log('set identifier touchstart')
+                    // console.log('set identifier touchstart')
                     touchIdentifiers[identifier] = touchEvent
                     const totalEvents = touchEvents.length
                     let i = 0
@@ -75,7 +75,7 @@ class TouchInputComponent {
                             touchEvents[index].remove()
                             touchEvents[index] = touchEvent
                         }
-                        console.log('set identifier touchmove')
+                        // console.log('set identifier touchmove')
                         touchIdentifiers[identifier] = touchEvent
                     }
                     break

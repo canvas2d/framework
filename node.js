@@ -14,7 +14,49 @@ class Node {
         this.hookComponent = null
         this.stateComponent = null
         this.animationComponent = null
+        this.interactive = false
+        this.inputId = -1
+        this.keyCode = 0
         return this
+    }
+    setInteractive(interactive) {
+        this.interactive = interactive
+    }
+    handleInteractive(session) {
+        if (!this.interactive) {
+            return
+        }
+        if (this.handleTouches(session.getTouchEvents()) ||
+            this.handleKeyboardEvents(session.getKeyboardEvents())
+        ) {
+            session.commandInputComponent.addInput(this.inputId)
+        }
+    }
+    handleTouches(touchEvents) {
+        if (!this.interactive || !touchEvents.length) {
+            return false
+        }
+        const frame = this.spaceComponent.frame
+        for (let i = touchEvents.length - 1; i >= 0; i--) {
+            const event = touchEvents[i]
+
+            if (event) {
+                const x = event.x
+                const y = event.y
+
+                if (frame.contains(x, y)) {
+                    return true
+                }
+            }
+        }
+    }
+    handleKeyboardEvents(keyEvents) {
+        if (!this.interactive) {
+            return false
+        }
+        if (keyEvents[this.keyCode]) {
+            return true
+        }
     }
     addStateSupport(state) {
         this.stateComponent = state

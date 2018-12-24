@@ -21,7 +21,6 @@ class KeyBoardInputComponent {
         this.handler = this.eventHandler.bind(this)
         return this
     }
-
     listen() {
         this.stopListen()
         keyEventTypes.forEach((type) => {
@@ -33,6 +32,12 @@ class KeyBoardInputComponent {
             this.host.removeEventListener(type, this.handler, passive)
         })
     }
+    addKeys(keys) {
+        const keyEvents = this.keyEvents
+        keys.forEach(function(key) {
+            keyEvents[key] = null
+        })
+    }
     eventHandler(e) {
         const session = this.session
         const keyEvents = this.keyEvents
@@ -40,6 +45,7 @@ class KeyBoardInputComponent {
         if (keyEvents[code] === undefined) {
             return
         }
+        console.log(e)
         const type = e.type
         switch (type) {
             case 'keydown':

@@ -1,6 +1,7 @@
 import Vector from '../common/vector.js'
 import Matrix from '../common/matrix.js'
 import Rotation from '../common/rotation.js'
+import Frame from '../common/frame.js'
 
 const cache = []
 
@@ -17,6 +18,8 @@ class SpaceComponent {
         this.position = Vector.create(0, 0)
         this.relative = Vector.create(0, 0)
         this._matrix = Matrix.create(1.0, 0.0, 0.0, 1.0, 0.0, 0.0)
+
+        this.frame = Frame.create(0, 0, 0, 0)
         return this
     }
     update(session, camera, parentMatrix) {
@@ -50,6 +53,7 @@ class SpaceComponent {
             A * -ax + C * -ay + tx,
             B * -ax + D * -ay + ty
         )
+        this.frame.computeWithMatrix(this.width, this.height, matrix)
         return this
     }
     getMatrix() {

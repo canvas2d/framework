@@ -32,6 +32,7 @@ class Node {
     }
     handleInteract(session) {
         this.interactComponent && this.interactComponent.handle(session)
+        this.nodeTreeComponent.handleInteract(session)
     }
     update(session, camera, parentMatrix) {
         this.hookComponent && this.hookComponent.handleOnUpdate(session, camera)

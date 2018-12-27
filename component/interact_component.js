@@ -3,15 +3,34 @@ class InteractComponent {
     constructor() {}
     init(host) {
         this.host = host
-        this.interactive = true
+        this.interactMask = 0
         this.inputId = -1
         this.keyCode = 0
+        this.acceptAll()
         return this
     }
+    acceptAll() {
+        this.interactMask |= 7
+    }
+    acceptTouch() {
+        this.interactMask |= 1
+    }
+    acceptKeyboard() {
+        this.interactMask |= 2
+    }
+    acceptMouse() {
+        this.interactMask |= 4
+    }
+    removeTouch() {
+        this.interactMask &= ~1
+    }
+    removeKeyboard() {
+        this.interactMask &= ~2
+    }
+    removeMouse() {
+        this.interactMask &= ~4
+    }
     handle(session) {
-        if (!this.interactive) {
-            return
-        }
         if (this.handleTouches(session.getTouchEvents()) ||
             this.handleKeyboardEvents(session.getKeyboardEvents()) ||
             this.handleMouseEvent(session.getMouseEvent())
@@ -20,25 +39,22 @@ class InteractComponent {
         }
     }
     handleTouches(touchEvents) {
-        if (!touchEvents || !this.interactive || !touchEvents.length) {
+        if (!(this.interactMask & 1) || !touchEvents || !touchEvents.length) {
             return false
         }
-        const frame = this.host.spaceComponent.frame
+        const spaceComponent = this.host.spaceComponent
         for (let i = touchEvents.length - 1; i >= 0; i--) {
             const event = touchEvents[i]
 
             if (event) {
-                const x = event.x
-                const y = event.y
-
-                if (frame.contains(x, y)) {
+                if (spaceComponent.contains(event.x, event.y)) {
                     return true
                 }
             }
         }
     }
     handleKeyboardEvents(keyEvents) {
-        if (!keyEvents || !this.interactive) {
+        if (!(this.interactMask & 2) || !keyEvents) {
             return false
         }
         if (keyEvents[this.keyCode]) {
@@ -46,10 +62,10 @@ class InteractComponent {
         }
     }
     handleMouseEvent(mouseEvent) {
-        if (!mouseEvent || !this.interactive) {
+        if (!(this.interactMask & 4) || !mouseEvent) {
             return false
         }
-        if (this.host.spaceComponent.frame.contains(mouseEvent.x, mouseEvent.y)) {
+        if (this.host.spaceComponent.contains(mouseEvent.x, mouseEvent.y)) {
             return true
         }
     }

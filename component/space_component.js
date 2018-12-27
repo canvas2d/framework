@@ -18,7 +18,7 @@ class SpaceComponent {
         this.position = Vector.create(0, 0)
         this.relative = Vector.create(0, 0)
         this._matrix = Matrix.create(1.0, 0.0, 0.0, 1.0, 0.0, 0.0)
-
+        this._matrixI = Matrix.create(1.0, 0.0, 0.0, 1.0, 0.0, 0.0)
         this.frame = Frame.create(0, 0, 0, 0)
         return this
     }
@@ -56,6 +56,17 @@ class SpaceComponent {
         this.frame.computeWithMatrix(this.width, this.height, matrix)
         return this
     }
+    contains(x, y) {
+        //取得当前矩阵的逆矩阵
+        const matrix = this._matrixI
+        this._matrix.inverseTo(matrix)
+
+        //将点转换至逆矩阵空间
+        const x2 = matrix.a * x + matrix.c * y + matrix.e
+        const y2 = matrix.b * x + matrix.d * y + matrix.f
+
+        return 0 <= x2 && x2 <= this.width && 0 <= y2 && y2 <= this.height
+    }
     getMatrix() {
         return this._matrix
     }
@@ -66,7 +77,24 @@ class SpaceComponent {
         return this.height
     }
     remove() {
-        this.host = null
+        this.anchor.remove()
+        this.rotation.remove()
+        this.scale.remove()
+        this.position.remove()
+        this.relative.remove()
+        this._matrix.remove()
+        this._matrixI.remove()
+        this.frame.remove()
+
+        this.anchor =
+            this.rotation =
+            this.scale =
+            this.position =
+            this.relative =
+            this._matrix =
+            this._matrixI =
+            this.frame =
+            this.host = null
         this._collect()
     }
     _collect() {

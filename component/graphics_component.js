@@ -1,3 +1,4 @@
+import Matrix from '../common/matrix.js'
 const cache = []
 class GraphicsComponent {
     constructor() {}
@@ -10,6 +11,7 @@ class GraphicsComponent {
         this.width = 0
         this.height = 0
         this.notUseCamera = false
+        this._renderMatrix = Matrix.create(1, 0, 0, 1, 0, 0)
         return this
     }
     getAlpha() {
@@ -47,7 +49,7 @@ class GraphicsComponent {
         this.setGraphicsInfo(
             session,
             camera,
-            node.spaceComponent.getMatrix(),
+            this._renderMatrix.set(node.spaceComponent.getMatrix()),
             parentAlpha,
             node.spaceComponent.getWidth(),
             node.spaceComponent.getHeight()
@@ -67,8 +69,10 @@ class GraphicsComponent {
         return this
     }
     remove() {
+        this._renderMatrix.remove()
         this.host =
-            this.texture = null
+            this.texture =
+            this._renderMatrix = null
         this._collect()
     }
     _collect() {

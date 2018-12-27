@@ -24,6 +24,11 @@ class NodeTreeComponent {
             child && child.render(...args)
         })
     }
+    handleInteract(...args) {
+        this.children.forEach((child) => {
+            child && child.handleInteract(...args)
+        })
+    }
     setParent(parent) {
         this.parent = parent
     }

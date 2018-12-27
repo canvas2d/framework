@@ -116,6 +116,8 @@ class TouchInputComponent {
     remove() {
         this.host =
             this.session =
+            this.touchEvents =
+            this.touchIdentifiers =
             this.handler = null
         this._collect()
     }

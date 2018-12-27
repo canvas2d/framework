@@ -12,9 +12,9 @@ class AnimationComponent {
         this.actionManager.update(session)
     }
     remove() {
-        this.host = null
         this.actionManager.remove()
-        this.actionManager = null
+        this.host =
+            this.actionManager = null
         this._collect()
     }
     _collect() {

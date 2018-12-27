@@ -47,7 +47,8 @@ class DomEventComponent {
         this.touchComponent =
             this.keyboardComponent =
             this.mouseComponent =
-            this.host = null
+            this.host = 
+            this.session = null
         this._collect()
     }
     _collect() {

@@ -10,7 +10,7 @@ class ResolutionComponent {
             height: 0,
             maxWidth: 0,
             maxHeight: 0,
-            resolution: Vector.create(0,0)
+            resolution: Vector.create(0, 0)
         }
         this.display = {
             width: 0,
@@ -73,6 +73,9 @@ class ResolutionComponent {
         // this.pubsubComponent.pub('resolution-change', this.design)
     }
     remove() {
+        this.design.resolution.remove()
+        this.display.baseTransform.remove()
+        this.display._baseTransformI.remove()
         this.design =
             this.display = null
         this._collect()

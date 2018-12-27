@@ -52,13 +52,17 @@ class Node {
         this.nodeTreeComponent.remove()
         this.graphicsComponent.remove()
         this.spaceComponent.remove()
+        this.hookComponent && this.hookComponent.remove()
         this.stateComponent && this.stateComponent.remove()
         this.animationComponent && this.animationComponent.remove()
+        this.interactComponent && this.interactComponent.remove()
         this.nodeTreeComponent =
             this.graphicsComponent =
             this.spaceComponent =
+            this.hookComponent =
             this.stateComponent =
-            this.animationComponent = null
+            this.animationComponent =
+            this.interactComponent = null
         this._collect()
     }
     _collect() {

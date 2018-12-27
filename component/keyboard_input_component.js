@@ -63,6 +63,10 @@ class KeyBoardInputComponent {
         }
     }
     _collect() {
+        this.host =
+            this.session =
+            this.keyEvents =
+            this.handler = null
         KeyBoardInputComponent.collect(this)
     }
     static create(host, session) {

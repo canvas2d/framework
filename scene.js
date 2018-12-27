@@ -9,6 +9,8 @@ class Scene extends Node {
     }
     init() {
         super.init()
+        this.tileComponent = null
+        this.cameraComponent = null
         return this
     }
     addCameraSupport(camera) {
@@ -31,17 +33,20 @@ class Scene extends Node {
     }
     handleInput(session) {
         session.commandInputComponent.reset()
-        this.nodeTreeComponent.children.forEach(function(child) {
-            child.handleInteract(session)
-        })
+        this.handleInteract(session)
     }
     render(session) {
         this.nodeTreeComponent.render(session, this.cameraComponent, this.graphicsComponent.getAlpha())
     }
     remove() {
+        super.remove()
         this.cameraComponent && this.cameraComponent.remove()
         this.tileComponent && this.tileComponent.remove()
         this.cameraComponent = this.tileComponent = null
+        this._collect()
+    }
+    _collect() {
+        Scene.collect(this)
     }
     static create() {
         return (cache.length ? cache.pop() : new Scene).init()

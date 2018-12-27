@@ -155,7 +155,9 @@ class TileComponent {
         }
     }
     remove() {
-        this.host = null
+        this.nodeTreeComponent.remove()
+        this.nodeTreeComponent =
+            this.host = null
         this._collect()
     }
     _collect() {

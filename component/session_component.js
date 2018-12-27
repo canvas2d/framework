@@ -77,7 +77,7 @@ class SessionComponent {
         this.commandInputComponent.remove()
         this.commandInputComponent =
             this.canvasComponent =
-            this.host = null
+            this.domEventComponent = null
         this._collect()
     }
     _collect() {

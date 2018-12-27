@@ -60,11 +60,13 @@ class CameraComponent {
         this._matrix.remove()
         this._matrixI.remove()
         this.hookComponent && this.hookComponent.remove()
+        this.frame.remove()
         this.host =
             this.position =
             this._matrix =
             this._matrixI =
-            this.hookComponent = null
+            this.hookComponent = 
+            this.frame = null
         this._collect()
     }
     _collect() {

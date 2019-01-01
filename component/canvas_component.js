@@ -1,27 +1,64 @@
 import DomEventComponent from './dom_event_component.js'
 import ResolutionComponent from './resolution_component.js'
+import DomContextComponent from './dom_context_component.js'
+import CanvasContextComponent from './canvas_context_component.js'
+import WebglContextComponent from './webgl_context_component.js'
 import debounce from '../common/debounce.js'
 
 const cache = []
 class CanvasComponent {
     constructor() {}
-    init(dom) {
-        if (!dom) {
-            dom = document.createElement('canvas')
-            dom.width = document.documentElement.scrollWidth
-            dom.height = document.documentElement.scrollHeight
-            dom.setAttribute('tabindex', '1')
-            document.body.appendChild(dom)
-            dom.focus()
-        }
+    init(dom, type) {
         this.host = dom
-        this.ctx = dom.getContext('2d')
+        this.type = -1
+        this.ctx = null
 
         this.resolutionComponent = ResolutionComponent.create()
-        this.domEventComponent = DomEventComponent.create(dom, this)
+        this.domEventComponent = null
         this.resizeHandler = debounce(this.onResize.bind(this), 100)
         this.resizeListen()
+        this.setRenderType(type)
         return this
+    }
+    setRenderType(type) {
+        type = type | 0
+        if (this.type == type) {
+            return
+        }
+        switch (type) {
+            case 1:
+            case 2:
+                this.ctx && this.ctx.remove()
+                break
+        }
+        if (this.host) {
+            this.host.parentNode.removeChild(this.host)
+        }
+        this.type = type
+        if (!this.host) {
+            this.host = document.createElement(type == 1 ? 'div' : 'canvas')
+            document.body.appendChild(this.host)
+        }
+        const dom = this.host
+        dom.width = document.documentElement.scrollWidth
+        dom.height = document.documentElement.scrollHeight
+        dom.setAttribute('tabindex', '1')
+        dom.focus()
+        switch (type) {
+            case 0:
+                this.ctx = CanvasContextComponent.create(dom)
+                break
+            case 1:
+                this.ctx = DomContextComponent.create(dom)
+                break
+            case 2:
+                this.ctx = WebglContextComponent.create(dom)
+                break
+        }
+        if (this.domEventComponent) {
+            this.domEventComponent.remove()
+        }
+        this.domEventComponent = DomEventComponent.create(dom, this)
     }
     onResize() {
         const scaleRatio = window.devicePixelRatio
@@ -31,15 +68,26 @@ class CanvasComponent {
         let fullHeight = window.innerHeight //document.documentElement.scrollHeight
 
         // console.log(fullWidth, fullHeight)
-        this.host.style.width = fullWidth + 'px'
-        this.host.style.height = fullHeight + 'px'
-        fullWidth *= scaleRatio
-        fullHeight *= scaleRatio
-        fullWidth |= 0
-        fullHeight |= 0
-        this.host.width = fullWidth
-        this.host.height = fullHeight
+        if (this.type != 1) {
+            this.host.style.width = fullWidth + 'px'
+            this.host.style.height = fullHeight + 'px'
+            fullWidth *= scaleRatio
+            fullHeight *= scaleRatio
+            fullWidth |= 0
+            fullHeight |= 0
+            this.host.width = fullWidth
+            this.host.height = fullHeight
+        } else {
 
+            fullWidth *= scaleRatio
+            fullHeight *= scaleRatio
+            fullWidth |= 0
+            fullHeight |= 0
+            this.host.style.width = fullWidth + 'px'
+            this.host.style.height = fullHeight + 'px'
+            this.host.style.transform = 'scale(' + 1 / scaleRatio + ',' + 1 / scaleRatio + ')'
+            this.host.style.transformOrigin = 'top left'
+        }
         this.resolutionComponent.resize(fullWidth, fullHeight, scaleRatio)
     }
     resizeListen() {
@@ -58,14 +106,26 @@ class CanvasComponent {
     drawImage(texture, sx, sy, swidth, sheight, x, y, width, height) {
         this.ctx.drawImage(texture, sx, sy, swidth, sheight, x, y, width, height)
     }
+    drawTileImage(texture, sx, sy, swidth, sheight, x, y, width, height) {
+        this.ctx.drawTileImage(texture, sx, sy, swidth, sheight, x, y, width, height)
+    }
+    setNodeId(id) {
+        this.ctx.setNodeId(id)
+    }
+    beginRender() {
+        this.ctx.beginRender()
+    }
+    endRender() {
+        this.ctx.endRender()
+    }
     draw(color, x, y, width, height) {
-        this.ctx.fillStyle = color
+        this.ctx.setFillStyle(color)
         this.ctx.fillRect(x, y, width, height)
     }
     remove() {
-        this.domEventComponent.remove()
+        this.ctx && this.ctx.remove()
+        this.domEventComponent && this.domEventComponent.remove()
         window.removeEventListener('resize', this.resizeHandler)
-
         this.host =
             this.dom =
             this.ctx =
@@ -76,8 +136,8 @@ class CanvasComponent {
     _collect() {
         CanvasComponent.collect(this)
     }
-    static create(dom) {
-        return (cache.length ? cache.pop() : new CanvasComponent).init(dom)
+    static create(dom, type) {
+        return (cache.length ? cache.pop() : new this).init(dom, type)
     }
     static collect(item) {
         cache.push(item)

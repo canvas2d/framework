@@ -23,13 +23,17 @@ class GraphicsComponent {
         }
         return this
     }
-    setGraphicsInfo(session, camera, matrix, parentAlpha, width, height) {
+    setGraphicsInfo(session, camera, node, parentAlpha) {
+        const spaceComponent = node.spaceComponent
+        const matrix = this._renderMatrix.set(spaceComponent.getMatrix())
+        const width = spaceComponent.getWidth()
+        const height = spaceComponent.getHeight()
         if (this.texture && this.texture.rotated) {
             matrix.translate(
                 0,
                 height
             )
-            matrix.rotate(-Math.PI * 0.5)
+            matrix.rotateWithSinCos(-1, 0)
         }
 
         if (camera && !this.notUseCamera) {
@@ -41,6 +45,7 @@ class GraphicsComponent {
 
         session.setAlpha(this.alphaComputed = parentAlpha * this.alpha)
 
+        session.setNodeId(node.__id)
         this.width = width
         this.height = height
     }
@@ -49,10 +54,8 @@ class GraphicsComponent {
         this.setGraphicsInfo(
             session,
             camera,
-            this._renderMatrix.set(node.spaceComponent.getMatrix()),
-            parentAlpha,
-            node.spaceComponent.getWidth(),
-            node.spaceComponent.getHeight()
+            node,
+            parentAlpha
         )
 
         if (this.texture) {

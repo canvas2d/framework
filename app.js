@@ -8,9 +8,9 @@ import SessionComponent from './component/session_component.js'
 const cache = []
 class App {
     constructor() {}
-    init() {
+    init(dom, renderType) {
         this.run = this.runLoop.bind(this)
-        this.sessionComponent = SessionComponent.create()
+        this.sessionComponent = SessionComponent.create(dom, renderType)
         return this
     }
     update() {
@@ -18,7 +18,9 @@ class App {
         this.currentScene && this.currentScene.update(this.sessionComponent)
     }
     render() {
+        this.sessionComponent.beginRender()
         this.currentScene && this.currentScene.render(this.sessionComponent)
+        this.sessionComponent.endRender()
     }
     runLoop() {
         this.update()
@@ -40,8 +42,8 @@ class App {
     _collect() {
         App.collect(this)
     }
-    static create() {
-        return (cache.length ? cache.pop() : new App).init()
+    static create(dom, renderType) {
+        return (cache.length ? cache.pop() : new this).init(dom, renderType)
     }
     static collect(item) {
         cache.push(item)

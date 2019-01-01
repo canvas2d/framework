@@ -3,8 +3,10 @@ import Scene from './scene.js'
 import Node from './node.js'
 import Texture from './common/texture.js'
 import ImageLoader from './util/image_loader.js'
-
-const app = App.create()
+import Ajax from './util/ajax.js'
+import PlistParser from './util/plist_parser.js'
+import FrameChange from './action/frame_change.js'
+const app = App.create(undefined, 1)
 const scene = Scene.create()
 
 const btnLeft = Node.create()
@@ -70,6 +72,39 @@ scene.cameraComponent.hookComponent.onUpdate.push(function(session) {
     this.position.x = Math.max(session.getDesignInfo().resolution.x >> 1, this.position.x)
 })
 
+
+{
+
+    const node = Node.create()
+
+    node.spaceComponent.position.update(300, 300)
+    node.spaceComponent.width = 50
+    node.spaceComponent.height = 80
+
+    node.graphicsComponent.notUseCamera = true
+    Promise.all([
+        Ajax.get('./resource/PlayerSkeleton.plist'),
+        ImageLoader.load('./resource/PlayerSkeleton.png')
+    ]).then(function(items) {
+        const plistText = items[0]
+        const img = items[1]
+        const runFrame = /^Player_Skeleton_run_\d+.png$/
+
+        const frames = PlistParser.parse(items[0]).frames
+
+        const runFrames = Object.keys(frames).filter(function(key) {
+            return key.match(runFrame)
+        }).map(function(key) {
+            return frames[key].frame
+        })
+
+        node.graphicsComponent.texture = Texture.create(img)
+        node.addAnimationSupport()
+        node.animationComponent.runAction(FrameChange.create(runFrames, 5))
+    })
+
+    scene.nodeTreeComponent.addChild(node)
+}
 app.sessionComponent.domEventComponent.addTouchInputSupport()
 app.sessionComponent.domEventComponent.addKeyboardInputSupport()
 app.sessionComponent.domEventComponent.addMouseInputSupport()

@@ -146,7 +146,7 @@ class TileComponent {
             for (var j = xMin; j < xMax; j++) {
                 const cell = items[startIndex + j]
                 if (cell) {
-                    session.drawImage(texture,
+                    session.drawTileImage(texture,
                         cell[1], cell[2], cell[3], cell[4],
                         cell[5] - 1, cell[6] - 1, cell[3] + 2, cell[4] + 2
                     )

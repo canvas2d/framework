@@ -6,9 +6,11 @@ import HookComponent from './component/hook_component.js'
 import InteractComponent from './component/interact_component.js'
 
 const cache = []
+let id = 0
 class Node {
     constructor() {}
     init() {
+        this.__id = id++
         this.nodeTreeComponent = NodeTreeComponent.create(this)
         this.graphicsComponent = GraphicsComponent.create(this)
         this.spaceComponent = SpaceComponent.create(this)
@@ -49,6 +51,7 @@ class Node {
         this.nodeTreeComponent.render(session, camera, alpha)
     }
     remove() {
+        this.hookComponent && this.hookComponent.handleOnRemove(session, camera)
         this.nodeTreeComponent.remove()
         this.graphicsComponent.remove()
         this.spaceComponent.remove()

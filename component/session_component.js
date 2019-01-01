@@ -5,8 +5,8 @@ import CommandInputComponent from './command_input_component.js'
 const cache = []
 class SessionComponent {
     constructor() {}
-    init(dom) {
-        this.canvasComponent = CanvasComponent.create(dom)
+    init(dom, renderType) {
+        this.canvasComponent = CanvasComponent.create(dom, renderType)
         this.domEventComponent = DomEventComponent.create(this.canvasComponent.host, this)
         this.commandInputComponent = CommandInputComponent.create(this)
         this.deltaTime = 16.66
@@ -61,9 +61,22 @@ class SessionComponent {
     setAlpha(alpha) {
         this.canvasComponent.setAlpha(alpha)
     }
+    setNodeId(id) {
+        this.canvasComponent.setNodeId(id)
+    }
     drawImage(texture, sx, sy, swidth, sheight, x, y, width, height) {
         this.canvasComponent.drawImage(texture, sx, sy, swidth, sheight, x, y, width, height)
         return this
+    }
+    drawTileImage(texture, sx, sy, swidth, sheight, x, y, width, height) {
+        this.canvasComponent.drawTileImage(texture, sx, sy, swidth, sheight, x, y, width, height)
+        return this
+    }
+    beginRender() {
+        this.canvasComponent.beginRender()
+    }
+    endRender() {
+        this.canvasComponent.endRender()
     }
     draw(color, x, y, width, height) {
         if (!color) {
@@ -83,8 +96,8 @@ class SessionComponent {
     _collect() {
         SessionComponent.collect(this)
     }
-    static create(dom) {
-        return (cache.length ? cache.pop() : new SessionComponent).init(dom)
+    static create(dom, renderType) {
+        return (cache.length ? cache.pop() : new SessionComponent).init(dom, renderType)
     }
     static collect(item) {
         cache.push(item)

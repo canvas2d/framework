@@ -5,6 +5,7 @@ class CanvasContextComponent {
         this.ctx = dom.getContext('2d')
         return this
     }
+    resize() {}
     clearRect(x, y, width, height) {
         this.ctx.clearRect(x, y, width, height)
     }

@@ -19,6 +19,7 @@ class Context2d {
         this.currentNodeId = 0
         return this
     }
+    resize() {}
     beginRender() {
         this.textureRender.beginRender()
         this.tileRender.beginRender()

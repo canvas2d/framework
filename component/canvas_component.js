@@ -89,6 +89,7 @@ class CanvasComponent {
             this.host.style.transformOrigin = 'top left'
         }
         this.resolutionComponent.resize(fullWidth, fullHeight, scaleRatio)
+        this.ctx.resize(fullWidth, fullHeight, scaleRatio)
     }
     resizeListen() {
         window.addEventListener('resize', this.resizeHandler)
@@ -101,7 +102,7 @@ class CanvasComponent {
         this.ctx.setTransform(a, b, c, d, e, f)
     }
     setAlpha(alpha) {
-        this.ctx.globalAlpha = alpha
+        this.ctx.setAlpha(alpha)
     }
     drawImage(texture, sx, sy, swidth, sheight, x, y, width, height) {
         this.ctx.drawImage(texture, sx, sy, swidth, sheight, x, y, width, height)

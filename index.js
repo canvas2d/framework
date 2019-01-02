@@ -6,7 +6,7 @@ import ImageLoader from './util/image_loader.js'
 import Ajax from './util/ajax.js'
 import PlistParser from './util/plist_parser.js'
 import FrameChange from './action/frame_change.js'
-const app = App.create(undefined, 1)
+const app = App.create(undefined, 2)
 const scene = Scene.create()
 
 const btnLeft = Node.create()

@@ -15,6 +15,12 @@ class CanvasContextComponent {
     setAlpha(alpha) {
         this.ctx.globalAlpha = alpha
     }
+    drawFontText(text, width, height) {
+        this.ctx.font = text.font
+        this.ctx.textAlign = text.textAlign
+        this.ctx.textBaseline = text.textBaseline
+        this.ctx.fillText(text.text, width >> 1, height >> 1)
+    }
     setFillStyle(fillStyle) {
         this.ctx.fillStyle = fillStyle
     }

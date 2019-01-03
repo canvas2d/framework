@@ -1,4 +1,5 @@
 import Matrix from '../common/matrix.js'
+
 const cache = []
 class GraphicsComponent {
     constructor() {}
@@ -12,6 +13,7 @@ class GraphicsComponent {
         this.height = 0
         this.notUseCamera = false
         this._renderMatrix = Matrix.create(1, 0, 0, 1, 0, 0)
+        this.fontText = null
         return this
     }
     getAlpha() {
@@ -20,6 +22,9 @@ class GraphicsComponent {
     update(session, camera) {
         if (this.texture) {
             this.texture.update(session, camera)
+        }
+        if (this.fontText) {
+            this.fontText.update(session, camera)
         }
         return this
     }
@@ -60,6 +65,8 @@ class GraphicsComponent {
 
         if (this.texture) {
             this.renderTexture(session, this.texture)
+        } else if (this.fontText) {
+            this.drawFontText(session)
         } else if (this.color) {
             this.draw(session, this.color)
         }
@@ -71,11 +78,16 @@ class GraphicsComponent {
         session.draw(color, 0, 0, this.width, this.height)
         return this
     }
+    drawFontText(session) {
+        session.drawFontText(this.color, this.fontText, this.width, this.height)
+    }
     remove() {
         this._renderMatrix.remove()
+        this.fontText && this.fontText.remove()
         this.host =
             this.texture =
-            this._renderMatrix = null
+            this._renderMatrix =
+            this.fontText = null
         this._collect()
     }
     _collect() {

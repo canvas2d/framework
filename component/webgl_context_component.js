@@ -78,15 +78,14 @@ const textures = {}
 
 function getTexture(gl, img) {
     const src = img.src
-    if (!textures[src]) {
-        const texture = gl.createTexture()
-
-        textures[src] = {
+    let texture = textures[src]
+    if (!texture) {
+        texture = textures[src] = {
             width: img.width,
             height: img.height,
-            texture: texture
+            texture: gl.createTexture()
         }
-        gl.bindTexture(gl.TEXTURE_2D, texture)
+        gl.bindTexture(gl.TEXTURE_2D, texture.texture)
 
         // let's assume all images are not a power of 2
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE)
@@ -95,7 +94,7 @@ function getTexture(gl, img) {
 
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img)
     }
-    return textures[src]
+    return texture
 }
 
 function compileColorProgram(gl, V_COLOR_SHADER_SOURCE, F_COLOR_SHADER_SOURCE) {
@@ -250,11 +249,13 @@ class WebglContextComponent {
 
         this.matrix = new Float32Array([1, 0, 0, 1])
         this.color = [0, 0, 0, 1]
+        this.fillStyle = null
         this.translate = [0, 0]
         this.globalAlpha = 1
         this.width = 0
         this.height = 0
-
+        this.textCanvas = null
+        this.textCanvasCtx = null
         return this
     }
     clearRect(x, y, width, height) {}
@@ -271,11 +272,12 @@ class WebglContextComponent {
         this.color[3] = alpha
     }
     setFillStyle(fillStyle) {
+        this.fillStyle = fillStyle
         let color = colorUtil.get(fillStyle)
         this.color[0] = color[0]
         this.color[1] = color[1]
         this.color[2] = color[2]
-        if(color.length == 4) {
+        if (color.length == 4) {
             this.color[3] *= color[3]
         }
     }
@@ -285,7 +287,7 @@ class WebglContextComponent {
 
         this.ctx.viewport(0, 0, width, height)
     }
-    drawImage(texture, sx, sy, swidth, sheight, x, y, width, height) {
+    drawImage(texture, sx, sy, swidth, sheight, x, y, width, height, forceReadTexture) {
         const gl = this.ctx
         const textureProgram = this.textureProgram
         gl.useProgram(textureProgram.program)
@@ -304,11 +306,32 @@ class WebglContextComponent {
         setTextureSizeBuffer(gl, textureProgram, tex.width, tex.height)
 
         gl.bindTexture(gl.TEXTURE_2D, tex.texture)
-
+        if (forceReadTexture) {
+            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, texture)
+        }
         gl.drawArrays(gl.TRIANGLES, 0, 6)
     }
     drawTileImage(texture, sx, sy, swidth, sheight, x, y, width, height) {
         this.drawImage(texture, sx, sy, swidth, sheight, x, y, width, height)
+    }
+    drawFontText(text, width, height) {
+        let canvas = this.textCanvas
+        if (!canvas) {
+            canvas = document.createElement('canvas')
+            this.textCanvasCtx = canvas.getContext('2d')
+            canvas.src = 'TEXT_CANVAS'
+        }
+        canvas.width = width
+        canvas.height = height
+        const ctx = this.textCanvasCtx
+        ctx.fillStyle = this.fillStyle
+        ctx.font = text.font
+        ctx.textAlign = text.textAlign
+        ctx.textBaseline = text.textBaseline
+        ctx.clearRect(0, 0, width, height)
+
+        ctx.fillText(text.text, width >> 1, height >> 1)
+        this.drawImage(canvas, 0, 0, width, height, 0, 0, width, height, text.isChanged)
     }
     setNodeId(id) {}
     fillRect(x, y, width, height) {
@@ -333,6 +356,8 @@ class WebglContextComponent {
         this.ctx.deleteProgram(this.colorProgram)
 
         this.ctx =
+            this.textCanvas =
+            this.textCanvasCtx =
             this.textureProgram =
             this.colorProgram =
 

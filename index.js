@@ -6,6 +6,7 @@ import ImageLoader from './util/image_loader.js'
 import Ajax from './util/ajax.js'
 import PlistParser from './util/plist_parser.js'
 import FrameChange from './action/frame_change.js'
+//App.create的第二个参数 0:canvas 1:dom 2: webgl
 const app = App.create(undefined, 2)
 const scene = Scene.create()
 

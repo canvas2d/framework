@@ -1,6 +1,7 @@
 import Matrix from '../common/matrix.js'
 import DomTileRender from './dom_tile_render.js'
 import DomTextureRender from './dom_texture_render.js'
+import DomTextRender from './dom_text_render.js'
 
 const cache = []
 
@@ -16,6 +17,7 @@ class Context2d {
 
         this.tileRender = DomTileRender.create()
         this.textureRender = DomTextureRender.create()
+        this.textRender = DomTextRender.create()
         this.currentNodeId = 0
         return this
     }
@@ -37,6 +39,52 @@ class Context2d {
     }
     setAlpha(alpha) {
         this.globalAlpha = alpha
+    }
+    drawFontText(text, width, height) {
+        const divs = this.textRender.getDom(this.dom, this.currentNodeId)
+        const div = divs[0]
+        const child = divs[1]
+        div.style.transformOrigin = 'left top'
+        div.style.transform = this._matrix.toString()
+        div.style.position = 'absolute'
+        div.style.width = width + 'px'
+        div.style.height = height + 'px'
+        div.style.opacity = this.globalAlpha
+        div.style.zIndex = ++this.zIndex
+        child.style.color = this.fillStyle
+        child.style.font = text.font
+        child.style.position = 'absolute'
+        child.style.left = (width >> 1) + 'px'
+        child.style.top = (height >> 1) + 'px'
+        let translateX,
+            translateY
+        switch (text.textAlign) {
+            case 'left':
+            case 'start':
+                translateX = 0
+                break
+            case 'center':
+                translateX = '-50%'
+                break
+            case 'end':
+            case 'right':
+                translateX = '-100%'
+                break
+        }
+        switch (text.textBaseline) {
+            case 'top':
+                translateY = 0
+                break
+            case 'middle':
+                translateY = '-50%'
+                break
+            case 'bottom':
+                translateY = '-100%'
+                break
+        }
+        child.style.transform = 'translateX(' + translateX + ') translateY(' + translateY + ')'
+
+        child.innerText = text.text
     }
     drawImage(texture, sx, sy, swidth, sheight, x, y, width, height) {
         const divs = this.textureRender.getDom(this.dom, this.currentNodeId)
@@ -119,9 +167,11 @@ class Context2d {
         this._matrix.remove()
         this.tileRender.remove()
         this.textureRender.remove()
+        this.textRender.remove()
         this._matrix =
             this.tileRender =
             this.textureRender =
+            this.textRender =
             this.dom = null
 
         this._collect()

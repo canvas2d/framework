@@ -3,6 +3,9 @@ import ResolutionComponent from './resolution_component.js'
 import DomContextComponent from './dom_context_component.js'
 import CanvasContextComponent from './canvas_context_component.js'
 import WebglContextComponent from './webgl_context_component.js'
+import FPSComponent from './fps_component.js'
+import FontText from '../common/font_text.js'
+import Node from '../node.js'
 import debounce from '../common/debounce.js'
 
 const cache = []
@@ -11,9 +14,24 @@ class CanvasComponent {
     init(dom, type) {
         this.host = dom
         this.type = -1
+        this.renderType = null
         this.ctx = null
 
         this.resolutionComponent = ResolutionComponent.create()
+        this.fpsComponent = FPSComponent.create()
+        this.fpsNode = Node.create()
+
+        this.fpsNode.graphicsComponent.width =
+            this.fpsNode.spaceComponent.width = 400
+        this.fpsNode.graphicsComponent.height =
+            this.fpsNode.spaceComponent.height = 100
+
+        const fpsText = FontText.create()
+        fpsText.textAlign = 'right' //left center right
+        fpsText.textBaseline = "bottom" //top, middle, bottom
+        
+        this.fpsNode.graphicsComponent.fontText = fpsText
+
         this.domEventComponent = null
         this.resizeHandler = debounce(this.onResize.bind(this), 100)
         this.resizeListen()
@@ -35,6 +53,17 @@ class CanvasComponent {
             this.host.parentNode.removeChild(this.host)
         }
         this.type = type
+        switch (type) {
+            case 0:
+                this.renderType = ' canvas'
+                break
+            case 1:
+                this.renderType = ' dom'
+                break
+            case 2:
+                this.renderType = ' webgl'
+                break
+        }
         if (!this.host) {
             this.host = document.createElement(type == 1 ? 'div' : 'canvas')
             document.body.appendChild(this.host)
@@ -113,11 +142,25 @@ class CanvasComponent {
     setNodeId(id) {
         this.ctx.setNodeId(id)
     }
-    beginRender() {
-        this.ctx.beginRender()
+    beginRender(session) {
+        this.ctx.beginRender(session)
     }
-    endRender() {
-        this.ctx.endRender()
+    endRender(session) {
+        this.renderFPS(session)
+        this.ctx.endRender(session)
+    }
+    renderFPS(session) {
+        this.fpsComponent.update()
+        this.fpsNode.graphicsComponent.color = 'red'
+
+        const text = this.fpsNode.graphicsComponent.fontText
+        text.setText(this.fpsComponent.frameNumber + this.renderType)
+        text.setFont('32px Arail')
+        this.fpsNode.render(session)
+    }
+    drawFontText(color, fontText, width, height) {
+        this.ctx.setFillStyle(color)
+        this.ctx.drawFontText(fontText, width, height)
     }
     draw(color, x, y, width, height) {
         this.ctx.setFillStyle(color)
@@ -126,12 +169,19 @@ class CanvasComponent {
     remove() {
         this.ctx && this.ctx.remove()
         this.domEventComponent && this.domEventComponent.remove()
+        this.fpsComponent.remove()
+        this.fpsText.remove()
+        this.fpsNode.remove()
         window.removeEventListener('resize', this.resizeHandler)
         this.host =
             this.dom =
             this.ctx =
             this.domEventComponent =
-            this.resizeHandler = null
+            this.fpsComponent =
+            this.fpsNode =
+            this.fpsText =
+            this.resizeHandler =
+            this.session = null
         this._collect()
     }
     _collect() {

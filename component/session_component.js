@@ -6,7 +6,7 @@ const cache = []
 class SessionComponent {
     constructor() {}
     init(dom, renderType) {
-        this.canvasComponent = CanvasComponent.create(dom, renderType)
+        this.canvasComponent = CanvasComponent.create(dom, renderType, this)
         this.domEventComponent = DomEventComponent.create(this.canvasComponent.host, this)
         this.commandInputComponent = CommandInputComponent.create(this)
         this.deltaTime = 16.66
@@ -73,16 +73,19 @@ class SessionComponent {
         return this
     }
     beginRender() {
-        this.canvasComponent.beginRender()
+        this.canvasComponent.beginRender(this)
     }
     endRender() {
-        this.canvasComponent.endRender()
+        this.canvasComponent.endRender(this)
     }
     draw(color, x, y, width, height) {
         if (!color) {
             return
         }
         this.canvasComponent.draw(color, x, y, width, height)
+    }
+    drawFontText(color, fontText, width, height) {
+        this.canvasComponent.drawFontText(color, fontText, width, height)
     }
     remove() {
         this.canvasComponent.remove()

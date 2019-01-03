@@ -50,10 +50,12 @@
 
 18. [Webgl渲染支持](https://github.com/canvas2d/framework/blob/master/18.webgl_render.md)
 
-19. 碰撞处理
+19. [文字渲染](https://github.com/canvas2d/framework/blob/master/19.text_render.md)
 
 20. 状态管理器StateComponent
 
 21. 小游戏适配、Ejecta适配
 
-22. 用json配置游戏
+22. 用json配置游戏UI
+
+23. 开始写一个横版游戏

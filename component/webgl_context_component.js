@@ -116,6 +116,14 @@ function compileColorProgram(gl, V_COLOR_SHADER_SOURCE, F_COLOR_SHADER_SOURCE) {
 
         position_buffer: gl.createBuffer(),
         location_attr_position: gl.getAttribLocation(program, 'a_position'),
+        position_buffer_data: new Float32Array([
+            0, 0,
+            0, 0,
+            0, 0,
+            0, 0,
+            0, 0,
+            0, 0
+        ]),
 
         location_uniform_matrix: gl.getUniformLocation(program, 'u_matrix'),
         location_uniform_translate: gl.getUniformLocation(program, 'u_translate'),
@@ -143,9 +151,25 @@ function compileTextureProgram(gl, VSHADER_SOURCE, FSHADER_SOURCE) {
         texture: gl.createTexture(),
 
         position_buffer: gl.createBuffer(),
+        position_buffer_data: new Float32Array([
+            0, 0,
+            0, 0,
+            0, 0,
+            0, 0,
+            0, 0,
+            0, 0
+        ]),
         location_attr_position: gl.getAttribLocation(program, 'a_position'),
 
         texture_coord_buffer: gl.createBuffer(),
+        texture_coord_buffer_data: new Float32Array([
+            0, 0,
+            0, 0,
+            0, 0,
+            0, 0,
+            0, 0,
+            0, 0
+        ]),
         location_attr_text_coord: gl.getAttribLocation(program, 'a_tex_coord'),
 
         location_uniform_texture_size: gl.getUniformLocation(program, 'u_texture_size'),
@@ -172,14 +196,19 @@ function setTextureCoordBuffer(gl, program, x, y, width, height) {
     //2.bindBuffer
     gl.bindBuffer(gl.ARRAY_BUFFER, program.texture_coord_buffer)
 
-    const data = new Float32Array([
-        x, y,
-        x + width, y,
-        x, y + height,
-        x + width, y,
-        x, y + height,
-        x + width, y + height
-    ])
+    const data = program.texture_coord_buffer_data
+    data[0] = x
+    data[1] = y
+    data[2] = x + width
+    data[3] = y
+    data[4] = x
+    data[5] = y + height
+    data[6] = x + width
+    data[7] = y
+    data[8] = x
+    data[9] = y + height
+    data[10] = x + width
+    data[11] = y + height
 
     //3.bufferData
     gl.bufferData(gl.ARRAY_BUFFER, data, gl.STATIC_DRAW)
@@ -210,14 +239,19 @@ function setPositionBuffer(gl, program, x, y, width, height) {
     //2.bindBuffer
     gl.bindBuffer(gl.ARRAY_BUFFER, program.position_buffer)
 
-    const data = new Float32Array([
-        x, y,
-        x + width, y,
-        x, y + height,
-        x + width, y,
-        x, y + height,
-        x + width, y + height
-    ])
+    const data = program.position_buffer_data
+    data[0] = x
+    data[1] = y
+    data[2] = x + width
+    data[3] = y
+    data[4] = x
+    data[5] = y + height
+    data[6] = x + width
+    data[7] = y
+    data[8] = x
+    data[9] = y + height
+    data[10] = x + width
+    data[11] = y + height
 
     //3.bufferData
     gl.bufferData(gl.ARRAY_BUFFER, data, gl.STATIC_DRAW)

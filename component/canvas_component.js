@@ -107,7 +107,6 @@ class CanvasComponent {
             this.host.width = fullWidth
             this.host.height = fullHeight
         } else {
-
             fullWidth *= scaleRatio
             fullHeight *= scaleRatio
             fullWidth |= 0
@@ -146,6 +145,7 @@ class CanvasComponent {
         this.ctx.beginRender(session)
     }
     endRender(session) {
+        this.resolutionComponent.renderPatch(session)
         this.renderFPS(session)
         this.ctx.endRender(session)
     }

@@ -1,5 +1,6 @@
 import Matrix from '../common/matrix.js'
 import Vector from '../common/vector.js'
+import Node from '../node.js'
 
 const cache = []
 class ResolutionComponent {
@@ -19,6 +20,11 @@ class ResolutionComponent {
             _baseTransformI: Matrix.create(1, 0, 0, 1, 0, 0),
             scaleRatio: 1
         }
+        this.patchA = Node.create()
+        this.patchA.graphicsComponent.color = '#FFF'
+
+        this.patchB = Node.create()
+        this.patchB.graphicsComponent.color = '#FFF'
         return this
     }
     resize(fullW, fullH, scaleRatio) {
@@ -53,6 +59,33 @@ class ResolutionComponent {
 
         const paddingX = width * realRatio - fullW
         const paddingY = height * realRatio - fullH
+
+        if (Math.abs(paddingX) > 0.01) {
+            this.patchA.graphicsComponent.width = Math.abs(paddingX * 0.5)
+            this.patchA.graphicsComponent.height = fullH
+            this.patchA.spaceComponent.position.update(0, 0)
+
+            this.patchB.graphicsComponent.width = Math.abs(paddingX * 0.5)
+            this.patchB.graphicsComponent.height = fullH
+            this.patchB.spaceComponent.position.update(fullW - Math.abs(paddingX * 0.5), 0)
+
+        } else if (Math.abs(paddingY) > 0.01) {
+            this.patchA.graphicsComponent.width = fullW
+            this.patchA.graphicsComponent.height = Math.abs(paddingY * 0.5)
+            this.patchA.spaceComponent.position.update(0, 0)
+
+            this.patchB.graphicsComponent.width = fullW
+            this.patchB.graphicsComponent.height = Math.abs(paddingY * 0.5)
+            this.patchB.spaceComponent.position.update(0, fullH - Math.abs(paddingY * 0.5))
+        } else {
+            this.patchA.graphicsComponent.width =
+                this.patchA.graphicsComponent.height = 0
+            this.patchA.spaceComponent.position.update(0, 0)
+
+            this.patchB.graphicsComponent.width =
+                this.patchB.graphicsComponent.height = 0
+            this.patchB.spaceComponent.position.update(0, 0)
+        }
         this.display.baseTransform.update(
             1 / realRatio,
             0, 0,
@@ -69,15 +102,28 @@ class ResolutionComponent {
             paddingY * -0.5
         )
         this.design.resolution.update(width, height)
+    }
+    renderPatch(session) {
+        const posA = this.patchA.spaceComponent.position
+        session.setNodeId(this.patchA.__id)
+        session.setTransform(1, 0, 0, 1, posA.x, posA.y)
+        this.patchA.graphicsComponent.draw(session, this.patchA.graphicsComponent.color)
 
-        // this.pubsubComponent.pub('resolution-change', this.design)
+        const posB = this.patchB.spaceComponent.position
+        session.setNodeId(this.patchB.__id)
+        session.setTransform(1, 0, 0, 1, posB.x, posB.y)
+        this.patchB.graphicsComponent.draw(session, this.patchB.graphicsComponent.color)
     }
     remove() {
         this.design.resolution.remove()
         this.display.baseTransform.remove()
         this.display._baseTransformI.remove()
+        this.patchA.remove()
+        this.patchB.remove()
         this.design =
-            this.display = null
+            this.display =
+            this.patchA =
+            this.patchB = null
         this._collect()
     }
     _collect() {

@@ -35,12 +35,12 @@ function toRGBA(color) {
             number = number >> 8
             const r = number
 
-            rgba = [r / 256, g / 256, b / 256, 1]
+            rgba = [r / 255, g / 255, b / 255, 1]
             break
         case 'r':
             rgba = color.slice(color.indexOf('(') + 1, color.indexOf(')')).split(',').map(number => parseFloat(number))
             for (let i = 0; i < 3; i++) {
-                rgba[i] = rgba[i] / 256
+                rgba[i] = rgba[i] / 255
             }
             break
         case 'h':

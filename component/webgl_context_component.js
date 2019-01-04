@@ -268,10 +268,6 @@ function setPositionBuffer(gl, program, x, y, width, height) {
     )
 }
 
-function setTextureSizeBuffer(gl, program, width, height) {
-    gl.uniform2f(program.location_uniform_texture_size, width, height)
-}
-
 class WebglContextComponent {
     constructor() {}
     init(dom) {
@@ -332,12 +328,10 @@ class WebglContextComponent {
 
         gl.uniform1f(textureProgram.location_uniform_opacity, this.globalAlpha)
         gl.uniform2f(textureProgram.location_uniform_resolution, this.width, this.height)
-        gl.uniform2f(textureProgram.location_uniform_texture_size, swidth, sheight)
+        gl.uniform2f(textureProgram.location_uniform_texture_size, tex.width, tex.height)
 
         setTextureCoordBuffer(gl, textureProgram, sx, sy, swidth, sheight)
         setPositionBuffer(gl, textureProgram, x, y, width, height)
-
-        setTextureSizeBuffer(gl, textureProgram, tex.width, tex.height)
 
         gl.bindTexture(gl.TEXTURE_2D, tex.texture)
         if (forceReadTexture) {
@@ -354,9 +348,9 @@ class WebglContextComponent {
             canvas = document.createElement('canvas')
             this.textCanvasCtx = canvas.getContext('2d')
             canvas.src = 'TEXT_CANVAS'
+            canvas.width = width
+            canvas.height = height
         }
-        canvas.width = width
-        canvas.height = height
         const ctx = this.textCanvasCtx
         ctx.fillStyle = this.fillStyle
         ctx.font = text.font

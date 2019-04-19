@@ -11,7 +11,6 @@ class GraphicsComponent {
         this.alphaComputed = 1
         this.width = 0
         this.height = 0
-        this.notUseCamera = false
         this._renderMatrix = Matrix.create(1, 0, 0, 1, 0, 0)
         this.fontText = null
         return this
@@ -41,7 +40,7 @@ class GraphicsComponent {
             matrix.rotateWithSinCos(-1, 0)
         }
 
-        if (camera && !this.notUseCamera) {
+        if (camera && !spaceComponent.notUseCamera) {
             camera.transform(matrix)
         } else {
             session.transform(matrix)

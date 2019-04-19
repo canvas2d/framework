@@ -21,6 +21,8 @@ class SpaceComponent {
         this._matrixI = Matrix.create(1.0, 0.0, 0.0, 1.0, 0.0, 0.0)
         this.frame = Frame.create(0, 0, 0, 0)
         this._isInverseMatrixComputed = false
+        
+        this.notUseCamera = false
         return this
     }
     update(session, camera, parentMatrix) {
@@ -58,13 +60,16 @@ class SpaceComponent {
         this._isInverseMatrixComputed = false
         return this
     }
-    contains(x, y) {
-        //取得当前矩阵的逆矩阵
-        const matrix = this._matrixI
+    computeInverseMatrix(matrix) {
         if (!this._isInverseMatrixComputed) {
             this._matrix.inverseTo(matrix)
             this._isInverseMatrixComputed = true
         }
+    }
+    contains(x, y) {
+        //取得当前矩阵的逆矩阵
+        const matrix = this._matrixI
+        this.computeInverseMatrix(matrix)
 
         //将点转换至逆矩阵空间
         const x2 = matrix.a * x + matrix.c * y + matrix.e

@@ -1,6 +1,7 @@
 import Node from './node.js'
 import CameraComponent from './component/camera_component.js'
 import TileComponent from './component/tile_component.js'
+import PhysicsWorldComponent from './component/physics_world_component.js'
 
 const cache = []
 class Scene extends Node {
@@ -20,6 +21,9 @@ class Scene extends Node {
         this.tileComponent = tile || TileComponent.create(this)
         this.nodeTreeComponent.addChild(this.tileComponent)
     }
+    addPhysicsWorldSupport() {
+        this.physicsWorldComponent = PhysicsWorldComponent.create()
+    }
     update(session) {
         const camera = this.cameraComponent
 
@@ -28,6 +32,7 @@ class Scene extends Node {
 
         this.tileComponent && this.tileComponent.update(session, camera)
 
+        this.physicsWorldComponent && this.physicsWorldComponent.update(session)
         camera && camera.update(session)
         return this
     }
@@ -37,12 +42,17 @@ class Scene extends Node {
     }
     render(session) {
         this.nodeTreeComponent.render(session, this.cameraComponent, this.graphicsComponent.getAlpha())
+        this.physicsWorldComponent && this.physicsWorldComponent.resolve()
     }
     remove() {
         super.remove()
         this.cameraComponent && this.cameraComponent.remove()
         this.tileComponent && this.tileComponent.remove()
-        this.cameraComponent = this.tileComponent = null
+        this.physicsWorldComponent && this.physicsWorldComponent.remove()
+        this.cameraComponent =
+            this.tileComponent =
+            this.physicsWorldComponent = null
+
         this._collect()
     }
     _collect() {

@@ -65,7 +65,7 @@ class CameraComponent {
             this.position =
             this._matrix =
             this._matrixI =
-            this.hookComponent = 
+            this.hookComponent =
             this.frame = null
         this._collect()
     }

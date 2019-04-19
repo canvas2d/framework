@@ -4,6 +4,7 @@ import {
 } from './util/animation_frame.js'
 
 import SessionComponent from './component/session_component.js'
+import TaskQueueComponent from './component/task_queue_component.js'
 
 const cache = []
 class App {
@@ -11,6 +12,7 @@ class App {
     init(dom, renderType) {
         this.run = this.runLoop.bind(this)
         this.sessionComponent = SessionComponent.create(dom, renderType)
+        this.taskQueueComponent = TaskQueueComponent.create()
         return this
     }
     update() {
@@ -25,6 +27,7 @@ class App {
     runLoop() {
         this.update()
         this.render()
+        this.taskQueueComponent.update()
         this.requestAnimFrameId = requestAnimationFrame(this.run)
     }
     presentScene(scene) {
@@ -33,8 +36,10 @@ class App {
     remove() {
         cancelAnimationFrame(this.requestAnimFrameId)
         this.sessionComponent.remove()
+        this.taskQueueComponent.remove()
         this.currentScene && this.currentScene.remove()
         this.sessionComponent =
+            this.taskQueueComponent =
             this.currentScene =
             this.run = null
         this._collect()
